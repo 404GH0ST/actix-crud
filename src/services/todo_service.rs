@@ -1,11 +1,7 @@
 use std::sync::Arc;
-use validator::Validate;
 
 use crate::{
-    domain::{
-        models::{CreateTodoRequest, Todo},
-        repository::TodoRepository,
-    },
+    domain::{models::Todo, repository::TodoRepository},
     errors::errors::ApiError,
 };
 
@@ -18,9 +14,11 @@ impl TodoService {
         Self { repository }
     }
 
-    pub async fn create_todo(&self, request: CreateTodoRequest) -> Result<Todo, ApiError> {
-        request.validate().map_err(|_| ApiError::ValidationError)?;
-        let todo = self.repository.insert_todo(&request.title).await?;
+    pub async fn create_todo(&self, title: &str) -> Result<Todo, ApiError> {
+        if title.trim().is_empty() {
+            return Err(ApiError::ValidationError);
+        }
+        let todo = self.repository.insert_todo(title).await?;
         Ok(todo)
     }
 

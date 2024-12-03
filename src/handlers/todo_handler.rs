@@ -18,7 +18,7 @@ pub async fn handle_create_todo(
     service: web::Data<Arc<TodoService>>,
     request: web::Json<CreateTodoRequest>,
 ) -> Result<HttpResponse, ApiError> {
-    let todo = service.create_todo(request.into_inner()).await?;
+    let todo = service.create_todo(&request.into_inner().title).await?;
     Ok(HttpResponse::Created().json(todo))
 }
 

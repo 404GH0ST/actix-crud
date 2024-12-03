@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-use validator::Validate;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Todo {
@@ -10,9 +9,8 @@ pub struct Todo {
     pub completed: bool,
 }
 
-#[derive(Debug, Validate, Deserialize)]
+#[derive(Debug, Deserialize)]
 pub struct CreateTodoRequest {
-    #[validate(length(min = 1, message = "Title must not be empty"))]
     pub title: String,
 }
 
